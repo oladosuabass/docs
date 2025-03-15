@@ -1,8 +1,8 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
+    "title": "OpenAPI Contextlm",
+    "description": "ContextLM API endpoints",
     "license": {
       "name": "MIT"
     },
@@ -10,32 +10,22 @@
   },
   "servers": [
     {
-      "url": "http://sandbox.mintlify.com"
+      "url": "http://api.contextlm.ai"
     }
   ],
+
   "security": [
     {
-      "bearerAuth": []
+      "ApiKeyAuth": []
     }
   ],
   "paths": {
-    "/plants": {
+    "/v1/all_voices": {
       "get": {
-        "description": "Returns all plants from the system that the user has access to",
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "The maximum number of results to return",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
+        "description": "Returns all voices available for synthesis",
         "responses": {
           "200": {
-            "description": "Plant response",
+            "description": "Successful response",
             "content": {
               "application/json": {
                 "schema": {
@@ -58,11 +48,13 @@
             }
           }
         }
-      },
+      }
+    },
+    "/v1/generate_speech": {
       "post": {
-        "description": "Creates a new plant in the store",
+        "description": "Generates speech based on a given plant",
         "requestBody": {
-          "description": "Plant to add to the store",
+          "description": "Plant to use for speech synthesis",
           "content": {
             "application/json": {
               "schema": {
@@ -155,30 +147,20 @@
   "components": {
     "schemas": {
       "Plant": {
-        "required": [
-          "name"
-        ],
         "type": "object",
         "properties": {
-          "name": {
-            "description": "The name of the plant",
-            "type": "string"
-          },
-          "tag": {
-            "description": "Tag to specify the type",
-            "type": "string"
+          "voices": {
+            "description": "An array of all available voices.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
       "NewPlant": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/Plant"
-          },
-          {
-            "required": [
-              "id"
-            ],
             "type": "object",
             "properties": {
               "id": {
@@ -191,10 +173,7 @@
         ]
       },
       "Error": {
-        "required": [
-          "error",
-          "message"
-        ],
+        "required": ["error", "message"],
         "type": "object",
         "properties": {
           "error": {
@@ -208,6 +187,11 @@
       }
     },
     "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-Key"
+      },
       "bearerAuth": {
         "type": "http",
         "scheme": "bearer"

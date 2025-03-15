@@ -1,33 +1,29 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: "Introduction"
+description: "This is ContextLM API endpoints where you can find all the available endpoints for the ContextLM API."
 ---
 
 <Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
+  If you haven't read the [Quickstart](/quickstart) yet, we recommend doing that
+  first.
 </Note>
 
-## Welcome
+## Quick guide.
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
+To interact with ContextLM API, all you need is an API key and available credits.
 
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
+<CardGroup>
+
+<Card title="Create an API Key" icon="key" href="https://contextlm.ai/profile">
+  Create an API key to get started
 </Card>
 
-## Authentication
+<Card
+  title="Get credits"
+  icon="credit-card"
+  href="https://contextlm.ai/subscription">
+  New accounts comes with free credits to test out the API. Buy credits if you
+  need more.
+</Card>
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
-
-```json
-"security": [
-  {
-    "bearerAuth": []
-  }
-]
-```
+</CardGroup>
