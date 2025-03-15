@@ -31,7 +31,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Plant"
+                    "$ref": "#/components/schemas/AllVoices"
                   }
                 }
               }
@@ -58,7 +58,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewPlant"
+                "$ref": "#/components/schemas/GenerateSpeech"
               }
             }
           },
@@ -66,21 +66,61 @@
         },
         "responses": {
           "200": {
-            "description": "plant response",
+            "description": "Successful response",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Plant"
+                  "$ref": "#/components/schemas/GenerateSpeechResponse"
                 }
               }
             }
           },
           "400": {
-            "description": "unexpected error",
+            "description": "Bad request. Occurs when parameters are invalid",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/GenerateSpeechError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized. Occurs when API key is missing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerateSpeechError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden. Occurs when API key is valid but user does not have permission",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerateSpeechError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found. Occurs when requested resource does not exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerateSpeechError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerateSpeechError"
                 }
               }
             }
@@ -146,7 +186,7 @@
   },
   "components": {
     "schemas": {
-      "Plant": {
+      "AllVoices": {
         "type": "object",
         "properties": {
           "voices": {
@@ -158,20 +198,67 @@
           }
         }
       },
-      "NewPlant": {
+      "GenerateSpeech": {
         "allOf": [
           {
+            "required": ["text", "voice_id"],
             "type": "object",
             "properties": {
-              "id": {
-                "description": "Identification number of the plant",
-                "type": "integer",
-                "format": "int64"
+              "text": {
+                "description": "The text input to be converted to speech",
+                "type": "string"
+              },
+              "voice_id": {
+                "description": "The voice id to use in speech synthesis",
+                "type": "string"
+              },
+              "pitch": {
+                "description": "Speaking pitch, in the range [-20.0, 20.0]. 20 means increase 20 semitones from the original pitch. -20 means decrease 20 semitones from the original pitch.",
+                "type": "number",
+                "default": 0.0,
+                "minimum": -20.0,
+                "maximum": 20.0
+              },
+
+              "speaking_rate": {
+                "description": "Speaking rate/speed, in the range [0.25, 4.0]. 1.0 is the normal native speed supported by the specific voice. 2.0 is twice as fast, and 0.5 is half as fast. Any other values < 0.25 or > 4.0 will return an error.",
+                "type": "number",
+                "default": 1.0,
+                "minimum": 0.25,
+                "maximum": 4.0
+              },
+              "output_format": {
+                "description": "The format of the audio byte stream. LINEAR16 a.k.a WAV is the best for audio quality.",
+                "type": "string",
+                "default": "LINEAR16",
+                "enum": ["LINEAR16", "MP3", "OGG_OPUS", "MULAW"]
               }
             }
           }
         ]
       },
+      "GenerateSpeechResponse": {
+        "type": "object",
+        "properties": {
+          "audiobytes": {
+            "type": "string",
+            "format": "binary"
+          }
+        }
+      },
+      "GenerateSpeechError": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "detail": {
+            "type": "string"
+          }
+        }
+      },
+
       "Error": {
         "required": ["error", "message"],
         "type": "object",
