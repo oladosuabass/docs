@@ -10,7 +10,7 @@
   },
   "servers": [
     {
-      "url": "http://api.contextlm.ai"
+      "url": "https://api.contextlm.ai"
     }
   ],
 
