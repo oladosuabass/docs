@@ -15,7 +15,7 @@
         "groups": [
           {
             "group": "Get Started",
-            "pages": ["introduction", "quickstart"]
+            "pages": ["introduction", "quickstart", "quickstart_pod"]
           }
         ]
       },
@@ -30,7 +30,8 @@
             "group": "Endpoint Examples",
             "pages": [
               "api-reference/endpoint/get",
-              "api-reference/endpoint/create"
+              "api-reference/endpoint/create",
+              "api-reference/endpoint/create_pod"
             ]
           }
         ]

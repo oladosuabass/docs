@@ -23,6 +23,17 @@
     "/v1/all_voices": {
       "get": {
         "description": "Returns all voices available for synthesis",
+        "parameters": [
+          {
+            "name": "is_podcast_only",
+            "in": "query",
+            "description": "Whether to return only podcast voices or all voices. Leave blank to get both.",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful response",
@@ -52,13 +63,91 @@
     },
     "/v1/generate_speech": {
       "post": {
-        "description": "Generates speech based on a given plant",
+        "description": "Generates natural-sounding speech",
         "requestBody": {
-          "description": "Plant to use for speech synthesis",
+          "description": "Speech synthesis parameters",
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/GenerateSpeech"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerateSpeechResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request. Occurs when parameters are invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerateSpeechError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized. Occurs when API key is missing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerateSpeechError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden. Occurs when API key is valid but user does not have permission",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerateSpeechError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found. Occurs when requested resource does not exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerateSpeechError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerateSpeechError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/generate_podcast": {
+      "post": {
+        "description": "Generates natural-sounding, engaging podcast between two speakers.",
+        "requestBody": {
+          "description": "Podcast synthesis parameters",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GeneratePodcast"
               }
             }
           },
@@ -232,6 +321,42 @@
                 "type": "string",
                 "default": "LINEAR16",
                 "enum": ["LINEAR16", "MP3", "OGG_OPUS", "MULAW"]
+              }
+            }
+          }
+        ]
+      },
+      "GeneratePodcast": {
+        "allOf": [
+          {
+            "required": ["dialogues", "host", "guest"],
+            "type": "object",
+            "properties": {
+              "dialogues": {
+                "description": "The text input to be converted to podcast. Must be an alternating list of text and role.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "role": {
+                      "description": "The role of the speaker",
+                      "type": "string",
+                      "enum": ["host", "guest"]
+                    },
+                    "content": {
+                      "description": "The text input to be converted to speech",
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "host": {
+                "description": "The voice id to use in podcast synthesis",
+                "type": "string"
+              },
+              "guest": {
+                "description": "The voice id to use in podcast synthesis",
+                "type": "string"
               }
             }
           }

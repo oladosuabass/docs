@@ -1,0 +1,97 @@
+---
+title: "Podcast - Quickstart"
+description: "Start building with ContextLM in under 5 minutes"
+---
+
+The ContextLM API delivers a streamlined interface to advanced context-aware podcast generation technology. Follow this quick start guide to master implementing engaging, natural-sounding podcast within your application.
+
+### 1. Create an API Key
+
+<AccordionGroup>
+  <Accordion icon="key" title="Create an API Key">
+    Follow the link below to create your API Key if you haven't done so already.
+    You will need it to interact with ContextLM API.
+    <Note>
+      If you already have an API Key, skip this step and move to the next
+      section.
+    </Note>
+    <Warning>
+      Remember that your API Key is confidential. Do not disclose it to others
+      or expose it in any client-side code (browsers, apps).
+    </Warning>
+    1. Go to [ContextLM.ai](https://contextlm.ai/auth) and sign up or log in. 2.
+    Go to [API Keys](https://contextlm.ai/profile) and create a new API Key.
+  </Accordion>
+</AccordionGroup>
+
+### 2. Make your first request
+
+Make a POST request to this endpoint: `https://api.contextlm.ai/v1/generate_podcast` to generate podcast.
+
+Remember to replace ContextLM_API_KEY with your actual API key.
+
+Terminal example
+
+```bash
+curl -X POST 'https://api.contextlm.ai/v1/generate_podcast' \
+-H 'x-api-key: $ContextLM_API_KEY' \
+-H 'Content-Type: application/json' \
+-d '{"dialogues": [{"role": "host", "content": "Alright, Sarah, what’s the one habit that completely changed your productivity?"}, {"role": "guest", "content": "Hands down—time blocking. Game changer."}], "host": "en-US-Ben-M-POD", "guest": "en-US-Kate-F-POD"}'
+
+```
+
+Python example
+
+```python
+import requests
+
+response = requests.post(
+"https://api.contextlm.ai/v1/generate_podcast",
+headers={"x-api-key": "$ContextLM_API_KEY"},
+json={"dialogues": [{"role": "host", "content": "Alright, Sarah, what’s the one habit that completely changed your productivity?"}, {"role": "guest", "content": "Hands down—time blocking. Game changer."}], "host": "en-US-Ben-M-POD", "guest": "en-US-Kate-F-POD"},
+)
+
+print(response.json())
+```
+
+Javascript example
+
+```javascript
+const response = await fetch("https://api.contextlm.ai/v1/generate_podcast", {
+  method: "POST",
+  headers: {
+    "x-api-key": "$ContextLM_API_KEY",
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    dialogues: [
+      {
+        role: "host",
+        content:
+          "Alright, Sarah, what’s the one habit that completely changed your productivity?",
+      },
+      { role: "guest", content: "Hands down—time blocking. Game changer." },
+    ],
+    host: "en-US-Ben-M-POD",
+    guest: "en-US-Kate-F-POD",
+  }),
+});
+
+console.log(response.json());
+```
+
+## 3. Configuration
+
+ContextLM supports speech synthesis with a variety of voices. Checkout the API reference for more details. To try out all the available voices, visit the [Voice Library](https://contextlm.ai/voices) page.
+
+<CardGroup>
+
+<Card title="API reference" icon="file" href="/api-reference/introduction">
+  View the API reference documentation.
+</Card>
+
+<Card title="Voice library" icon="speaker" href="https://contextlm.ai/voices">
+  View the voice library documentation.
+</Card>
+
+</CardGroup>
